@@ -158,18 +158,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function showCharacterDialogue(character, text) {
-        // Remove existing bubble if any
-        const existingBubble = document.querySelector(`.${character}-bubble`);
-        if (existingBubble) {
-            existingBubble.remove();
-        }
+        // Remove all existing bubbles for this character
+        const characterClass = character === 'mrEarthquake' ? 'mr-earthquake' : character;
+        const existingBubbles = document.querySelectorAll(`.${characterClass}-bubble`);
+        existingBubbles.forEach(bubble => {
+            // Fade out and remove existing bubbles
+            gsap.to(bubble, {
+                duration: 0.3,
+                opacity: 0,
+                scale: 0.8,
+                onComplete: () => bubble.remove()
+            });
+        });
 
+        // Create new bubble
         const bubble = document.createElement('div');
-        bubble.className = `dialogue-bubble ${character}-bubble`;
+        bubble.className = `dialogue-bubble ${characterClass}-bubble`;
         bubble.textContent = text;
         document.body.appendChild(bubble);
         
-        // Enhanced animation
+        // Enhanced animation for new bubble
         gsap.from(bubble, {
             duration: 0.8,
             scale: 0,
@@ -276,6 +284,78 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('total-questions').textContent = quizContent.length;
     }
 
+    function playVideo(videoId) {
+        const videoFrame = document.getElementById('youtube-video');
+        const quizBox = document.getElementById('quiz-box');
+        const dialogueElement = document.getElementById('dialogue');
+        const quizOptionsElement = document.getElementById('quiz-options');
+        
+        // Hide question and options with fade out
+        gsap.to([dialogueElement, quizOptionsElement], {
+            duration: 0.5,
+            opacity: 0,
+            onComplete: () => {
+                dialogueElement.style.display = 'none';
+                quizOptionsElement.style.display = 'none';
+                
+                let videoContainer = document.getElementById('video-container');
+                if (!videoContainer) {
+                    videoContainer = document.createElement('div');
+                    videoContainer.id = 'video-container';
+                    quizBox.appendChild(videoContainer);
+                }
+                
+                videoContainer.style.cssText = `
+                    width: 100%;
+                    height: 300px;
+                    margin: 10px 0;
+                    display: block;
+                    opacity: 0;
+                `;
+                
+                // Set video URL based on question
+                if (currentQuestionIndex === 0) {
+                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=38&end=44&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`;
+                } else if (currentQuestionIndex === 1) {
+                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=15&end=20&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`;
+                } else if (currentQuestionIndex === 2) {
+                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=98&end=102&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`;
+                }
+                videoContainer.appendChild(videoFrame);
+                
+                gsap.to(videoContainer, {
+                    duration: 0.5,
+                    opacity: 1
+                });
+                
+                setTimeout(() => {
+                    gsap.to(videoContainer, {
+                        duration: 0.5,
+                        opacity: 0,
+                        onComplete: () => {
+                            videoContainer.style.display = 'none';
+                            videoFrame.src = '';
+                            
+                            dialogueElement.style.display = 'block';
+                            quizOptionsElement.style.display = 'block';
+                            gsap.to([dialogueElement, quizOptionsElement], {
+                                duration: 0.5,
+                                opacity: 1
+                            });
+                            
+                            currentQuestionIndex++;
+                            if (currentQuestionIndex < quizContent.length) {
+                                displayQuestion(currentQuestionIndex);
+                            } else {
+                                endQuiz();
+                            }
+                        }
+                    });
+                }, 6000);
+            }
+        });
+    }
+
     function handleAnswer(selectedAnswer) {
         clearInterval(timerInterval);
         const currentQuiz = quizContent[currentQuestionIndex];
@@ -283,11 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Play appropriate sound
         if (isCorrect) {
-            correctSound.currentTime = 0; // Reset sound to start
+            correctSound.currentTime = 0;
             correctSound.play();
             score++;
         } else {
-            wrongSound.currentTime = 0; // Reset sound to start
+            wrongSound.currentTime = 0;
             wrongSound.play();
         }
 
@@ -307,6 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.disabled = true;
         });
 
+        // Show appropriate dialogues
         if (isCorrect) {
             showCharacterDialogue('annie', currentQuiz.correctResponse.annie);
             showCharacterDialogue('mrEarthquake', currentQuiz.correctResponse.mrEarthquake);
@@ -318,14 +399,27 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScore();
         updateProgress();
 
-        setTimeout(() => {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < quizContent.length) {
-                displayQuestion(currentQuestionIndex);
-            } else {
-                endQuiz();
-            }
-        }, 2500);
+        // Play video for first three questions regardless of correct/wrong
+        if (currentQuestionIndex <= 2) {
+            setTimeout(() => {
+                const videoIds = [
+                    'BLEPakj1YTY', // question 1
+                    'nMDIX-zApRg', // question 2
+                    'BLEPakj1YTY'  // question 3
+                ];
+                playVideo(videoIds[currentQuestionIndex]);
+            }, 1000);
+        } else {
+            // For questions without video
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizContent.length) {
+                    displayQuestion(currentQuestionIndex);
+                } else {
+                    endQuiz();
+                }
+            }, 2000);
+        }
     }
 
     function endQuiz() {

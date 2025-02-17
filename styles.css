@@ -226,17 +226,16 @@ body, html {
 }
 
 .mr-earthquake-bubble {
-    left: calc(80% + 150px);
-    bottom: 60%;
-    transform: translateY(50px);
+    left: calc(66% + 150px);
+    bottom: 75%;
 }
 
 .mr-earthquake-bubble:after {
     content: '';
     position: absolute;
-    bottom: -15px;
-    right: 30px;
-    border-width: 15px 15px 0;
+    bottom: -10px;
+    right: 20px;
+    border-width: 10px 10px 0;
     border-style: solid;
     border-color: rgba(255, 255, 255, 0.95) transparent;
 }
