@@ -227,7 +227,7 @@ body, html {
 
 .mr-earthquake-bubble {
     left: calc(66% + 150px);
-    bottom: 75%;
+    bottom: 65%;
 }
 
 .mr-earthquake-bubble:after {

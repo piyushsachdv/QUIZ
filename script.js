@@ -8,60 +8,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizContent = [
         {
             initial: {
-                annie: "Hi there! I'm Annie, your friendly neighborhood safety expert. We need to be prepared for anything!",
-                mrEarthquake: "MUHAHAHA! I am the mighty Mr. Earthquake! Time to shake things up! Let's see if you can survive my seismic challenge!"
+                annie: "Hi there! I'm Sarah, your friendly neighborhood safety expert. Though I doubt we'll need any safety tips today... right?",
+                mrEarthquake: "HAHAHA! I'm Mr. Earthquake, and oh boy, do I have some ground-breaking plans for you! Get it? Ground-breaking? No? Tough crowd..."
             },
-            question: "What's the first thing you should do during an earthquake?",
+            question: "The scene takes place in a classroom. A teacher is explaining a lesson when suddenly, the ground starts shaking. The students panic. What's the correct safety measure you should take in this situation?",
             options: [
-                "Drop, Cover, and Hold On",
-                "Run outside immediately",
-                "Stand in a doorway",
-                "Use the elevator to evacuate"
+                "Running outside immediately",
+                "Standing near windows or glass doors",
+                "Ignoring the teacher's instructions",
+                "Drop, cover and hold on"
             ],
-            correctAnswer: "Drop, Cover, and Hold On",
+            correctAnswer: "Drop, cover and hold on",
             correctResponse: {
-                annie: "Excellent! Drop, Cover, and Hold On is your best defense!",
-                mrEarthquake: "CURSES! Another smart one! You're ruining all my plans for chaos!"
+                annie: "Well, well! Looks like someone actually paid attention in safety class!",
+                mrEarthquake: "Ugh, seriously? You're no fun at all. I had the elevator trap all ready to go..."
             },
             wrongResponse: {
-                annie: "No! That's exactly what Mr. Earthquake wants you to do!",
-                mrEarthquake: "HAHAHA! YES! Run around in panic! This is getting entertaining!"
+                annie: "Oh great... Another person who thinks they can outrun physics.",
+                mrEarthquake: "YES! I love it when they run around like headless chickens! Entertainment at its finest!"
             }
         },
         {
-            question: "Where is the safest place to take cover during an earthquake?",
+            question: "The scene takes place inside a moving car. The driver and passengers suddenly feel the ground shaking. Let us see the correct safety measure you can take when a situation like this occurs.",
             options: [
-                "Under a sturdy desk or table",
-                "Next to a tall bookshelf",
-                "Near windows",
-                "In front of a mirror"
+                "Park in the middle of the road",
+                "Panic and speed up",
+                "Stop under bridges, overpass, or tunnels",
+                "Turn on hazard lights"
             ],
-            correctAnswer: "Under a sturdy desk or table",
+            correctAnswer: "Turn on hazard lights",
             correctResponse: {
-                annie: "Perfect! That desk might just save your life!",
-                mrEarthquake: "BAH! Hiding under furniture? Where's the drama in that?!"
+                annie: "Excellent! Turning on hazard lights alerts other drivers and helps prevent accidents during the earthquake.",
+                mrEarthquake: "Hmph! I was hoping you'd choose something more... chaotic!"
             },
             wrongResponse: {
-                annie: "That's a disaster waiting to happen! Think safer!",
-                mrEarthquake: "OH YES! Stand by those lovely shattering hazards! evil laughter"
+                annie: "That's dangerous! You're putting yourself and others at risk. Never stop under structures or panic during an earthquake.",
+                mrEarthquake: "Yes! That's exactly what I want to see - more chaos and danger! Keep making those risky choices!"
             }
         },
         {
-            question: "What should you do after an earthquake stops?",
+            question: "The scene takes place inside an apartment. A group of friends/family members are in the living room when the earthquake starts. The ground begins shaking. Objects start rattling. Let us see the correct safety measure you can take when a situation like this occurs.",
             options: [
-                "Check for injuries and hazards",
-                "Use matches to check for damage",
-                "Immediately use the telephone",
-                "Turn on all electrical appliances"
+                "Use the stairs to leave the building",
+                "Running outside immediately",
+                "Use the elevator",
+                "Take shelter near heavy furniture or appliances"
             ],
-            correctAnswer: "Check for injuries and hazards",
+            correctAnswer: "Use the stairs to leave the building",
             correctResponse: {
-                annie: "Finally! Someone who doesn't think post-earthquake mood lighting is a good idea!",
-                mrEarthquake: "Party pooper! The matches would've made such a lovely secondary disaster..."
+                annie: "Great thinking! When there's no sturdy table around, protecting your head with whatever is available is crucial!",
+                mrEarthquake: "Ugh, you're too prepared! I was hoping you'd try the elevator adventure..."
             },
             wrongResponse: {
-                annie: "Oh perfect, because what this situation really needs is a fire... facepalm",
-                mrEarthquake: "YES! Let's add some sparks to the party! This is getting better by the minute!"
+                annie: "That's a dangerous choice! Stay inside and protect yourself - elevators and running outside are extremely risky!",
+                mrEarthquake: "Yes! Nothing like watching people make dangerous decisions during my performance!"
             }
         },
         {
@@ -93,11 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
             correctAnswer: "Cover mouth and tap on pipes",
             correctResponse: {
                 annie: "Well, would you look at that - someone who doesn't think this is the time to start their fire-breathing career!",
-                mrEarthquake: "ARGH! Such calculated calmness! Where's the screaming? The panic? You're taking all the fun out of this!"
+                mrEarthquake: "Tapping? That's so... methodical. Where's the drama? The chaos? The unnecessary panic?"
             },
             wrongResponse: {
                 annie: "Sure, because turning yourself into a human torch will DEFINITELY help the situation...",
-                mrEarthquake: "PERFECT! Nothing says 'total disaster' like combining my earthquake with a nice fire! I love a good combo disaster! maniacal laughter"
+                mrEarthquake: "Now THAT'S what I'm talking about! Nothing says 'help' like adding some fire to the mix!"
             }
         }
     ];
@@ -275,12 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProgress() {
         const progressFill = document.querySelector('.progress-fill');
-        const progress = (currentQuestionIndex / quizContent.length) * 100;
+        const progress = ((currentQuestionIndex + 1) / quizContent.length) * 100;
         progressFill.style.width = `${progress}%`;
     }
 
     function updateScore() {
-        document.getElementById('current-score').textContent = score;
+        document.getElementById('current-score').textContent = Math.min(currentQuestionIndex + 1, 5);
         document.getElementById('total-questions').textContent = quizContent.length;
     }
 
@@ -290,7 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const dialogueElement = document.getElementById('dialogue');
         const quizOptionsElement = document.getElementById('quiz-options');
         
-        // Hide question and options with fade out
         gsap.to([dialogueElement, quizOptionsElement], {
             duration: 0.5,
             opacity: 0,
@@ -313,13 +312,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     opacity: 0;
                 `;
                 
-                // Set video URL based on question
                 if (currentQuestionIndex === 0) {
-                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=38&end=44&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`;
+                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=38&end=44&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&mute=1`;
                 } else if (currentQuestionIndex === 1) {
-                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=15&end=20&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`;
+                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=15&end=20&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&mute=1`;
                 } else if (currentQuestionIndex === 2) {
-                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=98&end=102&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3`;
+                    videoFrame.src = `https://www.youtube.com/embed/${videoId}?start=98&end=102&autoplay=1&controls=0&cc_load_policy=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&mute=1`;
                 }
                 videoContainer.appendChild(videoFrame);
                 
@@ -340,15 +338,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             quizOptionsElement.style.display = 'block';
                             gsap.to([dialogueElement, quizOptionsElement], {
                                 duration: 0.5,
-                                opacity: 1
+                                opacity: 1,
+                                onComplete: () => {
+                                    // Increment question counter after video finishes
+                                    currentQuestionIndex++;
+                                    if (currentQuestionIndex < quizContent.length) {
+                                        displayQuestion(currentQuestionIndex);
+                                    } else {
+                                        endQuiz();
+                                    }
+                                }
                             });
-                            
-                            currentQuestionIndex++;
-                            if (currentQuestionIndex < quizContent.length) {
-                                displayQuestion(currentQuestionIndex);
-                            } else {
-                                endQuiz();
-                            }
                         }
                     });
                 }, 6000);
@@ -399,25 +399,71 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScore();
         updateProgress();
 
-        // Play video for first three questions regardless of correct/wrong
+        // Handle videos and images
         if (currentQuestionIndex <= 2) {
+            // First three questions - play videos as before
             setTimeout(() => {
                 const videoIds = [
-                    'BLEPakj1YTY', // question 1
-                    'nMDIX-zApRg', // question 2
-                    'BLEPakj1YTY'  // question 3
+                    'BLEPakj1YTY',
+                    'nMDIX-zApRg',
+                    'BLEPakj1YTY'
                 ];
                 playVideo(videoIds[currentQuestionIndex]);
             }, 1000);
-        } else {
-            // For questions without video
+        } 
+        else if (currentQuestionIndex === 3 || currentQuestionIndex === 4) {
+            // For questions 4 and 5 - show images
             setTimeout(() => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < quizContent.length) {
-                    displayQuestion(currentQuestionIndex);
-                } else {
-                    endQuiz();
-                }
+                const videoContainer = document.getElementById('video-container');
+                videoContainer.style.cssText = `
+                    width: 100%;
+                    height: 300px;
+                    margin: 10px 0;
+                    display: block;
+                    opacity: 0;
+                `;
+                
+                // Clear previous content
+                videoContainer.innerHTML = '';
+                
+                // Show appropriate image based on question number
+                const imageNumber = currentQuestionIndex === 3 ? '4' : '5';
+                const img = document.createElement('img');
+                img.src = `image${imageNumber}.png`;
+                img.style.cssText = `
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    display: block;
+                `;
+                
+                // Add error handling
+                img.onerror = () => console.error(`Failed to load image${imageNumber}.png`);
+                img.onload = () => console.log(`Successfully loaded image${imageNumber}.png`);
+                
+                videoContainer.appendChild(img);
+                
+                gsap.to(videoContainer, {
+                    duration: 0.5,
+                    opacity: 1
+                });
+
+                // After 8 seconds, proceed to next question
+                setTimeout(() => {
+                    gsap.to(videoContainer, {
+                        duration: 0.5,
+                        opacity: 0,
+                        onComplete: () => {
+                            videoContainer.style.display = 'none';
+                            currentQuestionIndex++;
+                            if (currentQuestionIndex < quizContent.length) {
+                                displayQuestion(currentQuestionIndex);
+                            } else {
+                                endQuiz();
+                            }
+                        }
+                    });
+                }, 8000);
             }, 2000);
         }
     }
